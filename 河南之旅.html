@@ -1,0 +1,417 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>洛阳 · 开封 · 许昌 — 四人河南之旅</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<style>
+  :root {
+    --gold: #c9a96e;
+    --gold-dark: #a07828;
+    --bg: #fdfaf3;
+    --card: #ffffff;
+    --text: #3d3226;
+    --text-light: #6b5e4f;
+    --border: #e8ddcc;
+    --tag-train: #8b5e3c;
+    --tag-food: #c4622c;
+    --tag-spot: #2c6e49;
+    --tag-hotel: #4a5899;
+  }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body {
+    font-family: "PingFang SC","Noto Sans SC","Microsoft YaHei","苹方",sans-serif;
+    background: #f5efe0;
+    color: var(--text);
+    line-height:1.7;
+    min-height:100vh;
+  }
+
+  .hero {
+    background: linear-gradient(160deg, #3d2c1c 0%, #5c3d2e 30%, #8b6914 100%);
+    padding: 50px 24px 40px;
+    text-align: center;
+  }
+  .hero h1 {
+    font-size: clamp(26px,5vw,42px);
+    color: #f0d78c;
+    letter-spacing: 4px;
+    font-weight: 700;
+  }
+  .hero .subtitle { color:#d4b896; font-size:15px; margin-top:10px; letter-spacing:2px; }
+  .hero .meta { color:#b8956c; font-size:13px; margin-top:6px; }
+  .hero .people {
+    margin-top:18px; display:flex; justify-content:center; gap:14px; flex-wrap:wrap;
+  }
+  .hero .people span {
+    background:rgba(255,255,255,0.08); border:1px solid rgba(255,255,255,0.15);
+    color:#f0d78c; padding:7px 16px; border-radius:30px; font-size:13px;
+  }
+
+  /* ===== POSTER STRIP at TOP ===== */
+  .poster-strip {
+    max-width: 1100px;
+    margin: -20px auto 0;
+    padding: 0 16px 32px;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 16px;
+    position: relative;
+    z-index: 2;
+  }
+  @media(max-width:700px) {
+    .poster-strip { grid-template-columns: repeat(2,1fr); }
+  }
+  @media(max-width:400px) {
+    .poster-strip { grid-template-columns: 1fr; }
+  }
+  .poster-strip .ps-card {
+    background: #fff;
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.10);
+    transition: transform .25s, box-shadow .25s;
+    text-decoration: none;
+    display: block;
+  }
+  .poster-strip .ps-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+  }
+  .poster-strip .ps-card img {
+    width: 100%;
+    display: block;
+    aspect-ratio: 3/4;
+    object-fit: cover;
+  }
+  .poster-strip .ps-label {
+    text-align: center;
+    font-size: 12px;
+    color: var(--text-light);
+    padding: 10px 0;
+    letter-spacing: 1px;
+    font-weight: 500;
+    background: #fff;
+  }
+
+  /* ===== NAV ===== */
+  .nav-wrap {
+    position: sticky; top:0; z-index:100;
+    background:rgba(255,252,245,0.92); backdrop-filter:blur(16px);
+    border-bottom:1px solid var(--border);
+  }
+  .nav {
+    display:flex; overflow-x:auto; max-width:900px; margin:0 auto;
+    scrollbar-width:none;
+  }
+  .nav::-webkit-scrollbar { display:none; }
+  .nav a {
+    flex:0 0 auto; padding:14px 20px; text-decoration:none;
+    color:var(--text-light); font-size:14px; font-weight:500;
+    border-bottom:3px solid transparent; transition:all .2s;
+    white-space:nowrap; letter-spacing:1px;
+  }
+  .nav a:hover, .nav a.active { color:var(--gold-dark); border-bottom-color:var(--gold); }
+
+  .container { max-width:800px; margin:0 auto; padding:24px 20px 80px; }
+
+  /* ===== POSTER CARD per day ===== */
+  .poster-card {
+    position:relative; border-radius:18px; overflow:hidden;
+    box-shadow:0 6px 28px rgba(0,0,0,0.10);
+    margin-bottom:24px; background:#fff;
+  }
+  .poster-card img {
+    width:100%; display:block;
+    aspect-ratio: 3/4;
+    object-fit: cover;
+  }
+  @media(min-width:600px) {
+    .poster-card img { aspect-ratio:16/7; object-position:center 30%; }
+  }
+  .poster-card .overlay {
+    position:absolute; bottom:0; left:0; right:0;
+    background:linear-gradient(transparent, rgba(0,0,0,0.5));
+    padding:36px 20px 16px; color:#fff;
+  }
+  .poster-card .overlay .pdate { font-size:11px; letter-spacing:3px; opacity:.85; }
+  .poster-card .overlay .ptitle { font-size:18px; font-weight:700; letter-spacing:2px; margin-top:2px; }
+
+  .day-section { margin-bottom:48px; scroll-margin-top:100px; }
+
+  .day-header { display:flex; align-items:center; gap:14px; margin-bottom:20px; }
+  .day-num {
+    width:42px; height:42px; border-radius:50%;
+    display:flex; align-items:center; justify-content:center;
+    color:#fff; font-weight:700; font-size:18px; flex-shrink:0;
+  }
+  .day-num.d2 { background:#b8860b; }
+  .day-num.d3 { background:#c4622c; }
+  .day-num.d4 { background:#2c6e49; }
+  .day-num.d5 { background:#8b5e3c; }
+  .day-title h2 { font-size:20px; letter-spacing:1px; }
+  .day-title .date { font-size:12px; color:var(--text-light); }
+
+  /* ===== TIMELINE ===== */
+  .timeline { position:relative; padding-left:30px; }
+  .timeline::before {
+    content:""; position:absolute; left:13px; top:4px; bottom:4px;
+    width:2px; background:var(--border); border-radius:1px;
+  }
+  .tl-item {
+    position:relative; margin-bottom:18px; padding:14px 18px;
+    background:var(--card); border-radius:12px;
+    box-shadow:0 1px 3px rgba(0,0,0,0.04); border:1px solid var(--border);
+  }
+  .tl-dot {
+    position:absolute; left:-23px; top:18px;
+    width:10px; height:10px; border-radius:50%;
+    background:var(--gold); border:3px solid #fdfaf3;
+    box-shadow:0 0 0 2px var(--gold);
+  }
+  .tl-dot.train { background:var(--tag-train); box-shadow:0 0 0 2px var(--tag-train);}
+  .tl-dot.food { background:var(--tag-food); box-shadow:0 0 0 2px var(--tag-food);}
+  .tl-dot.spot { background:var(--tag-spot); box-shadow:0 0 0 2px var(--tag-spot);}
+  .tl-dot.hotel { background:var(--tag-hotel); box-shadow:0 0 0 2px var(--tag-hotel);}
+
+  .tl-time { font-size:12px; font-weight:600; margin-bottom:3px; display:flex; align-items:center; gap:6px; }
+  .tl-time .badge {
+    font-size:10px; padding:2px 8px; border-radius:16px;
+    letter-spacing:.5px; font-weight:500;
+  }
+  .badge.train { background:#f3e7d8; color:#8b5e3c; }
+  .badge.food { background:#fde8db; color:#c4622c; }
+  .badge.spot { background:#dff0e4; color:#2c6e49; }
+  .badge.hotel { background:#e4e7f5; color:#4a5899; }
+
+  .tl-title { font-size:15px; font-weight:600; }
+  .tl-desc { font-size:12px; color:var(--text-light); }
+  .highlight { background:linear-gradient(180deg, transparent 60%, #fef3c7 60%); padding:0 2px; }
+
+  /* ===== FOOTER GALLERY ===== */
+  .gallery-tease {
+    display:grid; grid-template-columns:repeat(4,1fr); gap:14px; margin:40px 0 20px;
+  }
+  @media(max-width:600px) { .gallery-tease { grid-template-columns:repeat(2,1fr); } }
+  .gallery-tease a {
+    display:block; border-radius:12px; overflow:hidden;
+    box-shadow:0 2px 10px rgba(0,0,0,0.06);
+    transition:transform .2s; text-decoration:none;
+  }
+  .gallery-tease a:hover { transform:translateY(-3px); }
+  .gallery-tease img { width:100%; display:block; aspect-ratio:3/4; object-fit:cover; }
+  .gallery-tease .cap { text-align:center; font-size:11px; color:var(--text-light); padding:6px 0; background:#fff; }
+
+  .footer {
+    text-align:center; padding:36px 20px; color:var(--text-light);
+    font-size:13px; border-top:1px solid var(--border); margin-top:20px;
+  }
+  .footer .divider { display:inline-block; width:36px; height:2px; background:var(--gold); margin-bottom:10px; }
+
+  @media(max-width:600px) {
+    .hero { padding:36px 14px 28px; }
+    .hero h1 { font-size:22px; letter-spacing:2px; }
+    .nav a { padding:10px 12px; font-size:12px; }
+    .timeline { padding-left:24px; }
+    .tl-dot { left:-19px; width:8px; height:8px; top:20px; }
+    .tl-item { padding:12px 12px; }
+  }
+
+  @media print {
+    body { background:#fff; font-size:11px; }
+    .nav-wrap { display:none; }
+    .hero { padding:20px; background:#3d2c1c!important; -webkit-print-color-adjust:exact; }
+    .poster-strip { display:none; }
+    .tl-item { break-inside:avoid; box-shadow:none; border:1px solid #ddd; }
+    .poster-card { box-shadow:none; break-inside:avoid; }
+    .poster-card img { max-height:180px; object-fit:contain; }
+    .gallery-tease { display:none; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ===== HERO ===== -->
+<header class="hero">
+  <h1>洛 阳 · 开 封 · 许 昌</h1>
+  <p class="subtitle">四人之旅 · 河南</p>
+  <p class="meta">2026年5月17日 — 5月20日</p>
+  <div class="people">
+    <span>🏷️ 张哲晟</span>
+    <span>🏷️ 吴梦江</span>
+    <span>🏷️ 爸爸</span>
+    <span>🏷️ 妈妈</span>
+  </div>
+</header>
+
+<!-- ===== 🔥 四张海报 · 页面最顶部 ===== -->
+<div class="poster-strip">
+  <a href="#day2" class="ps-card">
+    <img src="day1.jpg" alt="5/17 洛阳">
+    <div class="ps-label">📅 5/17 · 洛阳</div>
+  </a>
+  <a href="#day3" class="ps-card">
+    <img src="day2.jpg" alt="5/18 万岁山">
+    <div class="ps-label">📅 5/18 · 万岁山</div>
+  </a>
+  <a href="#day4" class="ps-card">
+    <img src="day3.jpg" alt="5/19 清明上河园">
+    <div class="ps-label">📅 5/19 · 清明上河园</div>
+  </a>
+  <a href="#day5" class="ps-card">
+    <img src="day4.jpg" alt="5/20 胖东来">
+    <div class="ps-label">📅 5/20 · 胖东来</div>
+  </a>
+</div>
+
+<!-- ===== STICKY NAV ===== -->
+<nav class="nav-wrap">
+  <div class="nav">
+    <a href="#day2" class="active">5/17 洛阳</a>
+    <a href="#day3">5/18 开封</a>
+    <a href="#day4">5/19 清明上河园</a>
+    <a href="#day5">5/20 胖东来</a>
+  </div>
+</nav>
+
+<!-- ===== MAIN ===== -->
+<div class="container">
+
+<!-- ========== 5/17 ========== -->
+<section class="day-section" id="day2">
+  <div class="poster-card">
+    <img src="day1.jpg" alt="5月17日 洛阳·龙门石窟">
+    <div class="overlay">
+      <div class="pdate">DAY 1 · 2026.05.17</div>
+      <div class="ptitle">🏯 洛阳 · 龙门石窟</div>
+    </div>
+  </div>
+  <div class="day-header">
+    <div class="day-num d2">1</div>
+    <div class="day-title"><h2>洛阳 · 龙门石窟</h2><p class="date">2026年5月17日 · 周日</p></div>
+  </div>
+  <div class="timeline">
+    <div class="tl-item"><div class="tl-dot train"></div><div class="tl-time"><span class="badge train">高铁</span> 08:47</div><div class="tl-title">🚄 G3832 汉口 → 武汉</div><div class="tl-desc">全员 ×4人 · 23分钟</div></div>
+    <div class="tl-item"><div class="tl-dot train"></div><div class="tl-time"><span class="badge train">高铁</span> 09:42</div><div class="tl-title">🚄 G856 武汉 → 洛阳龙门</div><div class="tl-desc">全员 ×4人 · 3小时2分 · 12:44抵达</div></div>
+    <div class="tl-item"><div class="tl-dot hotel"></div><div class="tl-time"><span class="badge hotel">入住</span> 12:50</div><div class="tl-title">🏨 麗枫酒店 · 洛阳龙门高铁站店</div><div class="tl-desc">🚶 步行3分钟 · 放行李</div></div>
+    <div class="tl-item"><div class="tl-dot food"></div><div class="tl-time"><span class="badge food">午餐</span> 13:30</div><div class="tl-title">🍜 武哥跑马汤 · 洛阳水席</div><div class="tl-desc">洛阳美食TOP1 · 牡丹燕菜 | 连汤肉片 | 焦炸丸</div></div>
+    <div class="tl-item"><div class="tl-dot spot"></div><div class="tl-time"><span class="badge spot">景点</span> 15:00</div><div class="tl-title">🛕 白马寺 · 中国第一古刹</div><div class="tl-desc">天王殿 → 大佛殿 → 国际佛殿 → 齐云塔 · 约1.5小时</div></div>
+    <div class="tl-item"><div class="tl-dot spot"></div><div class="tl-time"><span class="badge spot">景点</span> 17:10</div><div class="tl-title">🏯 龙门石窟 · 世界文化遗产</div><div class="tl-desc">西山石窟（白天）→ 东山 → 香山寺 → 白园</div></div>
+    <div class="tl-item"><div class="tl-dot spot"></div><div class="tl-time"><span class="badge spot">亮灯</span> 🔥 19:00</div><div class="tl-title"><span class="highlight">龙门亮灯</span> · 礼佛台观景</div><div class="tl-desc">隔伊河看西山千龛暖黄灯火倒映水面</div></div>
+    <div class="tl-item"><div class="tl-dot food"></div><div class="tl-time"><span class="badge food">晚餐</span> 19:50</div><div class="tl-title">🍜 河洛烩面（总店）</div><div class="tl-desc">洛阳销量第1 · 滋补烩面 | 招牌黑爪小公鸡</div></div>
+    <div class="tl-item"><div class="tl-dot hotel"></div><div class="tl-time"><span class="badge hotel">住宿</span> 21:10</div><div class="tl-title">🏨 回麗枫酒店</div></div>
+  </div>
+</section>
+
+<!-- ========== 5/18 ========== -->
+<section class="day-section" id="day3">
+  <div class="poster-card">
+    <img src="day2.jpg" alt="5月18日 开封·万岁山">
+    <div class="overlay">
+      <div class="pdate">DAY 2 · 2026.05.18</div>
+      <div class="ptitle">⚔️ 开封 · 万岁山武侠城</div>
+    </div>
+  </div>
+  <div class="day-header">
+    <div class="day-num d3">2</div>
+    <div class="day-title"><h2>洛阳 → 开封 · 万岁山武侠城</h2><p class="date">2026年5月18日 · 周一</p></div>
+  </div>
+  <div class="timeline">
+    <div class="tl-item"><div class="tl-dot food"></div><div class="tl-time"><span class="badge food">早餐</span> 08:30</div><div class="tl-title">🥣 老穆家牛肉汤（总店）</div><div class="tl-desc">关林商圈小吃第2名 · 牛肉汤+饼+辣椒</div></div>
+    <div class="tl-item"><div class="tl-dot spot"></div><div class="tl-time"><span class="badge spot">景点</span> 09:10</div><div class="tl-title">🏯 关林庙 · 武圣关羽首级葬地</div><div class="tl-desc">明代大殿 | 古柏 | 关羽冢 · 约1小时</div></div>
+    <div class="tl-item"><div class="tl-dot train"></div><div class="tl-time"><span class="badge train">高铁</span> 11:16</div><div class="tl-title">🚄 G2260 洛阳龙门 → 开封北</div><div class="tl-desc">全员 ×4人 · 1小时3分 · 12:19抵达</div></div>
+    <div class="tl-item"><div class="tl-dot hotel"></div><div class="tl-time"><span class="badge hotel">入住</span> 12:40</div><div class="tl-title">🏨 亚朵酒店 · 清明上河园龙亭公园店</div><div class="tl-desc">开封高档酒店No.1 · 金耀路</div></div>
+    <div class="tl-item"><div class="tl-dot food"></div><div class="tl-time"><span class="badge food">午餐</span> 13:00</div><div class="tl-title">🥟 邢家锅贴老店 · 百年非遗</div><div class="tl-desc">🚶 同一条金耀路步行8分钟 · 猪肉锅贴 | 桶子鸡 | 炒凉粉</div></div>
+    <div class="tl-item"><div class="tl-dot spot"></div><div class="tl-time"><span class="badge spot">入园</span> 14:00</div><div class="tl-title">⚔️ 万岁山武侠城 · 南门入园</div><div class="tl-desc">含翰园碑林+城墙+铁塔公园 · 3天不限次</div></div>
+    <div class="tl-item"><div class="tl-dot spot"></div><div class="tl-time"><span class="badge spot">必看</span> 15:30</div><div class="tl-title">⚔️ 武松醉打蒋门神</div><div class="tl-desc">快活林</div></div>
+    <div class="tl-item"><div class="tl-dot spot"></div><div class="tl-time"><span class="badge spot">必看</span> 16:00</div><div class="tl-title">💃 老嫂子斗舞</div><div class="tl-desc">王婆岛西岛 · 30分钟</div></div>
+    <div class="tl-item"><div class="tl-dot spot"></div><div class="tl-time"><span class="badge spot">必看</span> 17:00</div><div class="tl-title">🔥 三打祝家庄 · 大型马战</div><div class="tl-desc">城寨沙场 · 提前20分占位</div></div>
+    <div class="tl-item"><div class="tl-dot food"></div><div class="tl-time"><span class="badge food">晚餐</span> 17:30</div><div class="tl-title">🍜 园区美食街</div></div>
+    <div class="tl-item"><div class="tl-dot spot"></div><div class="tl-time"><span class="badge spot">压轴</span> 🔥 19:30</div><div class="tl-title"><span class="highlight">打铁花 · 千年非遗</span></div><div class="tl-desc">城寨沙场 · 1600°C铁水夜空绽放</div></div>
+    <div class="tl-item"><div class="tl-dot food"></div><div class="tl-time"><span class="badge food">宵夜</span> 20:20</div><div class="tl-title">🍜 鼓楼夜市</div><div class="tl-desc">营业至凌晨1点 · 羊肉炕馍 | 黄焖鱼 | 杏仁茶</div></div>
+    <div class="tl-item"><div class="tl-dot hotel"></div><div class="tl-time"><span class="badge hotel">住宿</span> 21:30</div><div class="tl-title">🏨 回亚朵酒店</div></div>
+  </div>
+</section>
+
+<!-- ========== 5/19 ========== -->
+<section class="day-section" id="day4">
+  <div class="poster-card">
+    <img src="day3.jpg" alt="5月19日 清明上河园">
+    <div class="overlay">
+      <div class="pdate">DAY 3 · 2026.05.19</div>
+      <div class="ptitle">🎨 开封 · 清明上河园</div>
+    </div>
+  </div>
+  <div class="day-header">
+    <div class="day-num d4">3</div>
+    <div class="day-title"><h2>开封 · 清明上河园全天</h2><p class="date">2026年5月19日 · 周二</p></div>
+  </div>
+  <div class="timeline">
+    <div class="tl-item"><div class="tl-dot food"></div><div class="tl-time"><span class="badge food">早餐</span> 07:40</div><div class="tl-title">🥘 黄记胡辣汤 · 外卖到酒店</div><div class="tl-desc">胡辣汤 | 水煎包</div></div>
+    <div class="tl-item"><div class="tl-dot spot"></div><div class="tl-time"><span class="badge spot">入园</span> 09:00</div><div class="tl-title">🎭 迎宾门入园 · 包公迎宾</div><div class="tl-desc">🚶 亚朵步行6分钟</div></div>
+    <div class="tl-item"><div class="tl-dot spot"></div><div class="tl-time">09:05</div><div class="tl-title">🥁 盘鼓</div></div>
+    <div class="tl-item"><div class="tl-dot spot"></div><div class="tl-time">09:20</div><div class="tl-title">🚢 包公巡视汴河漕运 + 虹桥打卡</div></div>
+    <div class="tl-item"><div class="tl-dot spot"></div><div class="tl-time"><span class="badge spot">XR</span> 09:40</div><div class="tl-title">🎬 球幕影院 · 飞越清明上河图</div><div class="tl-desc">360°沉浸式 · 约15分钟</div></div>
+    <div class="tl-item"><div class="tl-dot spot"></div><div class="tl-time">10:00</div><div class="tl-title">💍 王员外招婿</div><div class="tl-desc">互动抢绣球！</div></div>
+    <div class="tl-item"><div class="tl-dot spot"></div><div class="tl-time"><span class="badge spot">王牌</span> 🔥 10:25</div><div class="tl-title">💦 大宋·东京保卫战 · 水战</div><div class="tl-desc">九龙桥 · 提前20分占西南临水第一排</div></div>
+    <div class="tl-item"><div class="tl-dot spot"></div><div class="tl-time"><span class="badge spot">王牌</span> 🔥 11:15</div><div class="tl-title">⚔️ 岳飞枪挑小梁王 · 马战</div><div class="tl-desc">大宋校场 · 提前20分占东侧看台</div></div>
+    <div class="tl-item"><div class="tl-dot food"></div><div class="tl-time"><span class="badge food">午餐</span> 11:50</div><div class="tl-title">🍜 东京食坊</div><div class="tl-desc">烩面 | 炒凉粉</div></div>
+    <div class="tl-item"><div class="tl-dot spot"></div><div class="tl-time">13:00—16:00</div><div class="tl-title">🚶 自由闲逛 · 二刷节目</div><div class="tl-desc">勾栏瓦肆 | 丹台宫赏花 | 景龙湖游船</div></div>
+    <div class="tl-item"><div class="tl-dot spot"></div><div class="tl-time">17:05</div><div class="tl-title">💍 王员外招婿 · 第三场</div></div>
+    <div class="tl-item"><div class="tl-dot spot"></div><div class="tl-time">🌅 18:00</div><div class="tl-title"><span class="highlight">汴河夜景亮灯</span></div><div class="tl-desc">虹桥→九龙桥 · 绝美拍照</div></div>
+    <div class="tl-item"><div class="tl-dot spot"></div><div class="tl-time">18:30</div><div class="tl-title">🎆 鱼灯巡游</div></div>
+    <div class="tl-item"><div class="tl-dot spot"></div><div class="tl-time"><span class="badge spot">压轴</span> 🔥 20:10</div><div class="tl-title"><span class="highlight">大宋·东京梦华</span> · 水上实景演出</div><div class="tl-desc">景龙湖A区 · 70分钟</div></div>
+    <div class="tl-item"><div class="tl-dot food"></div><div class="tl-time"><span class="badge food">晚餐</span> 21:35</div><div class="tl-title">🍖 梁山烤肉 · 东京总店</div><div class="tl-desc">水浒主题围炉 · 春羔羊肉 | 武大郎烧饼</div></div>
+  </div>
+</section>
+
+<!-- ========== 5/20 ========== -->
+<section class="day-section" id="day5">
+  <div class="poster-card">
+    <img src="day4.jpg" alt="5月20日 许昌胖东来">
+    <div class="overlay">
+      <div class="pdate">DAY 4 · 2026.05.20</div>
+      <div class="ptitle">🛒 许昌 · 胖东来天使城</div>
+    </div>
+  </div>
+  <div class="day-header">
+    <div class="day-num d5">4</div>
+    <div class="day-title"><h2>许昌胖东来 · 各自返程</h2><p class="date">2026年5月20日 · 周三</p></div>
+  </div>
+  <div class="timeline">
+    <div class="tl-item"><div class="tl-dot train"></div><div class="tl-time"><span class="badge train">高铁</span> 08:11</div><div class="tl-title">🚄 G1557 开封北 → 郑州东</div><div class="tl-desc">全员 · 21分钟</div></div>
+    <div class="tl-item"><div class="tl-dot train"></div><div class="tl-time"><span class="badge train">高铁</span> 09:02</div><div class="tl-title">🚄 G1163 郑州东 → 许昌东</div><div class="tl-desc">全员 · 22分钟 · 09:24抵达</div></div>
+    <div class="tl-item"><div class="tl-dot train"></div><div class="tl-time"><span class="badge train">返程</span> 10:42</div><div class="tl-title">👩 吴梦江 🚄 G511 许昌东 → 汉口</div><div class="tl-desc">先行返程 · 赶下午课</div></div>
+    <div class="tl-item"><div class="tl-dot spot"></div><div class="tl-time"><span class="badge spot">购物</span> 09:45</div><div class="tl-title">🛒 胖东来天使城</div><div class="tl-desc">五号门免费存行李 · DL美食区早餐</div></div>
+    <div class="tl-item"><div class="tl-dot spot"></div><div class="tl-time">必买</div><div class="tl-title">🔥 胖东来必买</div><div class="tl-desc"><strong>烘焙</strong>：红丝绒蛋糕 · 伯爵红茶卷 · 马斯卡彭蛋糕 · 芋泥奶包 · 丹麦坚果酥<br><strong>DL自营</strong>：酸奶麦片 · 鳕鱼干 · <span class="highlight">精酿啤酒</span> · 定制香肠</div></div>
+    <div class="tl-item"><div class="tl-dot train"></div><div class="tl-time"><span class="badge train">返程</span> 14:59</div><div class="tl-title">👴👵 爸妈 🚄 G639 许昌东 → 南昌西</div><div class="tl-desc">转 G1472 → 上饶 · 约20:10到家</div></div>
+    <div class="tl-item"><div class="tl-dot train"></div><div class="tl-time"><span class="badge train">返程</span> 15:51</div><div class="tl-title">🧑 张哲晟 🚄 G2171 许昌东 → 武汉</div><div class="tl-desc">转 G1028 → 汉口 · 约18:20到家</div></div>
+  </div>
+</section>
+
+<div class="footer">
+  <div class="divider"></div>
+  <p>洛阳 · 开封 · 许昌 &nbsp;|&nbsp; 四人河南之旅 &nbsp;|&nbsp; 2026.05.17—05.20</p>
+</div>
+
+</div>
+
+<script>
+  const navLinks=document.querySelectorAll('.nav a');
+  const sections=document.querySelectorAll('.day-section');
+  window.addEventListener('scroll',()=>{
+    let c='';
+    sections.forEach(s=>{if(window.scrollY>=s.offsetTop-120)c=s.getAttribute('id');});
+    navLinks.forEach(a=>{a.classList.toggle('active',a.getAttribute('href')==='#'+c);});
+  });
+  navLinks.forEach(a=>{
+    a.addEventListener('click',e=>{
+      e.preventDefault();
+      const t=document.querySelector(a.getAttribute('href'));
+      if(t)t.scrollIntoView({behavior:'smooth'});
+    });
+  });
+</script>
+</body>
+</html>
